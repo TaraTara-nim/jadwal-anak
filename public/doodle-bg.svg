@@ -1,0 +1,50 @@
+<svg width="420" height="420" viewBox="0 0 420 420" xmlns="http://www.w3.org/2000/svg">
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+
+    <!-- star -->
+    <path d="M62 40 L70 60 L92 62 L75 76 L81 98 L62 86 L43 98 L49 76 L32 62 L54 60 Z"
+          stroke="#FFC93C" stroke-width="3" opacity="0.55"/>
+
+    <!-- cloud -->
+    <path d="M300 55 a15 15 0 0 1 27 -7 a18 18 0 0 1 31 11 a14 14 0 0 1 -4 27 h-50 a14 14 0 0 1 -4 -31z"
+          stroke="#4EA8DE" stroke-width="3" opacity="0.5"/>
+
+    <!-- squiggle line -->
+    <path d="M15 210 q20 -22 40 0 t40 0 t40 0" stroke="#FF6B6B" stroke-width="3" opacity="0.45"/>
+
+    <!-- heart -->
+    <path d="M335 300 c0 -14 -20 -14 -20 0 c0 10 20 22 20 22 s20 -12 20 -22 c0 -14 -20 -14 -20 0z"
+          stroke="#FF6FA0" stroke-width="3" opacity="0.5"/>
+
+    <!-- little flower -->
+    <g stroke="#6BCB77" stroke-width="2.5" opacity="0.45">
+      <circle cx="100" cy="330" r="11"/>
+      <circle cx="122" cy="330" r="11"/>
+      <circle cx="111" cy="313" r="11"/>
+      <circle cx="111" cy="347" r="11"/>
+      <circle cx="111" cy="330" r="6" fill="#6BCB77" opacity="0.35"/>
+    </g>
+
+    <!-- sparkles -->
+    <g stroke="#9B5DE5" stroke-width="3" opacity="0.45">
+      <path d="M225 105 v12 M219 111 h12"/>
+      <path d="M378 190 v9 M373.5 194.5 h9"/>
+      <path d="M40 155 v9 M35.5 159.5 h9"/>
+      <path d="M270 355 v9 M265.5 359.5 h9"/>
+    </g>
+
+    <!-- crescent moon -->
+    <path d="M255 250 a20 20 0 1 0 0 40 a16 16 0 1 1 0 -40z"
+          stroke="#FFC93C" stroke-width="3" opacity="0.45"/>
+
+    <!-- small sun -->
+    <g stroke="#FF8A5B" stroke-width="2.5" opacity="0.4">
+      <circle cx="370" cy="330" r="12"/>
+      <path d="M370 310 v-8 M370 350 v8 M350 330 h-8 M390 330 h8 M356 316 l-6 -6 M384 316 l6 -6 M356 344 l-6 6 M384 344 l6 6"/>
+    </g>
+
+    <!-- extra wavy scribble -->
+    <path d="M150 60 q10 -14 20 0 t20 0" stroke="#4EA8DE" stroke-width="2.5" opacity="0.35"/>
+
+  </g>
+</svg>

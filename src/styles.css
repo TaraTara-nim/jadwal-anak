@@ -23,8 +23,12 @@ body {
   margin: 0;
   background: var(--bg);
   background-image:
+    url('/doodle-bg.svg'),
     radial-gradient(circle at 8% 12%, rgba(255, 201, 60, 0.18) 0, transparent 40%),
     radial-gradient(circle at 92% 85%, rgba(78, 168, 222, 0.16) 0, transparent 42%);
+  background-repeat: repeat, no-repeat, no-repeat;
+  background-size: 420px 420px, auto, auto;
+  background-attachment: fixed, scroll, scroll;
   color: var(--ink);
   font-family: 'Nunito', system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -627,6 +631,10 @@ button {
 }
 
 @media print {
+  body {
+    background: white;
+    background-image: none;
+  }
   body * {
     visibility: hidden;
   }
