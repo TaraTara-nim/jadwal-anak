@@ -16,7 +16,10 @@ export default function ScheduleItem({ item, done, onToggle, onEdit, accentColor
         <span className="schedule-icon">{item.icon}</span>
         <span className="schedule-text">
           <span className="schedule-title">{item.title}</span>
-          <span className="schedule-time">{item.time?.slice(0, 5)}</span>
+          <span className="schedule-time">
+            {item.time?.slice(0, 5)}
+            {item.event_date && <span className="schedule-badge">📅 sekali</span>}
+          </span>
         </span>
       </button>
     </div>

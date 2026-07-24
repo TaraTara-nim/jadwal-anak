@@ -12,6 +12,7 @@ import {
   formatShort,
   formatFull,
   formatMonthYear,
+  isItemActiveOnDate,
 } from './constants'
 
 export default function HistoryView({ child, items, onBack }) {
@@ -104,7 +105,7 @@ export default function HistoryView({ child, items, onBack }) {
       ) : sortedItems.length === 0 ? (
         <p className="empty-state">Belum ada kegiatan untuk {child.name}.</p>
       ) : mode === 'harian' ? (
-        <DailyTable items={sortedItems} isoDate={toISODate(refDate)} dow={refDate.getDay()} isDone={isDone} />
+        <DailyTable items={sortedItems} date={refDate} isDone={isDone} />
       ) : mode === 'mingguan' ? (
         <WeeklyTable items={sortedItems} weekStart={range.start} isDone={isDone} />
       ) : (
@@ -114,8 +115,9 @@ export default function HistoryView({ child, items, onBack }) {
   )
 }
 
-function DailyTable({ items, isoDate, dow, isDone }) {
-  const applicable = items.filter((i) => (i.days || []).includes(dow))
+function DailyTable({ items, date, isDone }) {
+  const isoDate = toISODate(date)
+  const applicable = items.filter((i) => isItemActiveOnDate(i, date))
   if (applicable.length === 0) {
     return <p className="empty-state">Tidak ada kegiatan terjadwal di hari ini.</p>
   }
@@ -165,9 +167,8 @@ function WeeklyTable({ items, weekStart, isDone }) {
             <tr key={item.id}>
               <td className="history-item-name">{item.icon} {item.title}</td>
               {dates.map((d) => {
-                const dow = d.getDay()
                 const iso = toISODate(d)
-                const applicable = (item.days || []).includes(dow)
+                const applicable = isItemActiveOnDate(item, d)
                 return (
                   <td key={iso} className="history-check-cell">
                     {!applicable ? (
@@ -205,9 +206,8 @@ function MonthlyTable({ items, monthStart, monthEnd, isDone }) {
         </thead>
         <tbody>
           {dates.map((d) => {
-            const dow = d.getDay()
             const iso = toISODate(d)
-            const applicable = items.filter((i) => (i.days || []).includes(dow))
+            const applicable = items.filter((i) => isItemActiveOnDate(i, d))
             const done = applicable.filter((i) => isDone(i.id, iso)).length
             const pct = applicable.length ? Math.round((done / applicable.length) * 100) : null
             return (

@@ -1,11 +1,12 @@
 import React, { useState } from 'react'
 import { AVATAR_COLORS, AVATAR_EMOJIS } from './constants'
 
-export default function ChildModal({ onClose, onSave }) {
-  const [name, setName] = useState('')
-  const [color, setColor] = useState(AVATAR_COLORS[0].value)
-  const [emoji, setEmoji] = useState(AVATAR_EMOJIS[0])
+export default function ChildModal({ initial, onClose, onSave, onDelete }) {
+  const [name, setName] = useState(initial?.name || '')
+  const [color, setColor] = useState(initial?.avatar_color || AVATAR_COLORS[0].value)
+  const [emoji, setEmoji] = useState(initial?.avatar_emoji || AVATAR_EMOJIS[0])
   const [saving, setSaving] = useState(false)
+  const [confirmDelete, setConfirmDelete] = useState(false)
 
   async function handleSubmit(e) {
     e.preventDefault()
@@ -18,7 +19,7 @@ export default function ChildModal({ onClose, onSave }) {
   return (
     <div className="modal-backdrop" onClick={onClose}>
       <div className="modal-card" onClick={(e) => e.stopPropagation()}>
-        <h2 className="modal-title">Profil Anak Baru</h2>
+        <h2 className="modal-title">{initial ? 'Ubah Profil Anak' : 'Profil Anak Baru'}</h2>
         <form onSubmit={handleSubmit}>
           <label className="field-label">Nama anak</label>
           <input
@@ -57,11 +58,29 @@ export default function ChildModal({ onClose, onSave }) {
             ))}
           </div>
 
+          {initial && confirmDelete && (
+            <p className="auth-error">
+              Yakin hapus profil {initial.name}? Semua kegiatan dan riwayatnya akan ikut terhapus permanen.
+            </p>
+          )}
+
           <div className="modal-actions">
+            {initial && !confirmDelete && (
+              <button type="button" className="btn btn-danger" onClick={() => setConfirmDelete(true)}>
+                Hapus
+              </button>
+            )}
+            {initial && confirmDelete && (
+              <button type="button" className="btn btn-danger" onClick={onDelete}>
+                Ya, Hapus Permanen
+              </button>
+            )}
             <button type="button" className="btn btn-ghost" onClick={onClose}>Batal</button>
-            <button type="submit" className="btn btn-primary" disabled={saving || !name.trim()}>
-              {saving ? 'Menyimpan…' : 'Simpan'}
-            </button>
+            {!confirmDelete && (
+              <button type="submit" className="btn btn-primary" disabled={saving || !name.trim()}>
+                {saving ? 'Menyimpan…' : 'Simpan'}
+              </button>
+            )}
           </div>
         </form>
       </div>

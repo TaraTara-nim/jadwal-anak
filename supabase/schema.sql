@@ -20,7 +20,8 @@ create table if not exists schedule_items (
   title text not null,
   time time not null default '07:00',
   icon text not null default '⏰',
-  days int[] not null default '{0,1,2,3,4,5,6}', -- 0=Minggu .. 6=Sabtu
+  days int[] not null default '{0,1,2,3,4,5,6}', -- 0=Minggu .. 6=Sabtu (dipakai kalau event_date NULL)
+  event_date date, -- diisi kalau kegiatan sekali-jadi di tanggal tertentu (mengabaikan "days")
   created_at timestamptz not null default now()
 );
 

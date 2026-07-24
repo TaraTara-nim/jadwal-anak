@@ -78,14 +78,6 @@ Setelah deploy selesai, buka URL Netlify-nya — aplikasi siap dipakai. Daftar a
 - **schedule_items** — daftar kegiatan per anak: judul, jam, ikon, dan hari berlaku (0=Minggu … 6=Sabtu). Satu kegiatan bisa berlaku di beberapa hari sekaligus (misal Senin–Jumat).
 - **completions** — catatan kegiatan yang sudah dicentang selesai pada tanggal tertentu. Dihapus otomatis kalau kegiatan dihapus.
 
-## Menambah fitur lanjutan (ide pengembangan)
-
-- Notifikasi pengingat (butuh service worker + push notification, atau integrasi email/WhatsApp API).
-- Mode "anak" tanpa login yang hanya bisa mencentang, tanpa bisa mengedit — bisa dibuat lewat halaman terpisah dengan Supabase anon read-only view.
-- Statistik mingguan (grafik konsistensi kegiatan per anak).
-
----
-
 ## 4. Fitur Cetak & Kirim PDF via Email
 
 ### Cetak
@@ -105,3 +97,18 @@ Fitur ini memakai **Resend** ([resend.com](https://resend.com)) untuk mengirim e
 4. Trigger deploy ulang (**Deploys → Trigger deploy → Deploy site**).
 
 **Batasan paket gratis Resend:** selama kamu belum memverifikasi domain sendiri di Resend, email hanya bisa dikirim ke **alamat email yang kamu pakai mendaftar Resend** (mode testing). Untuk mengirim ke sembarang alamat email (misal ke email pasangan atau pengasuh), kamu perlu verifikasi domain sendiri di Resend (menu **Domains**) — butuh akses pengaturan DNS domain. Untuk pemakaian pribadi, mode testing biasanya sudah cukup.
+
+---
+
+## 5. Kegiatan Sekali-Jadi (Tanggal Tertentu) & Hapus Profil Anak
+
+**Jika project Supabase kamu sudah pernah dipakai sebelumnya** (bukan instalasi baru), jalankan dulu migrasi berikut supaya kolom baru tersedia:
+
+1. Buka **SQL Editor** di Supabase → **New query**
+2. Salin isi file `supabase/migration_002_event_date.sql`, tempel, klik **Run**
+
+Kalau ini instalasi baru (baru pertama kali menjalankan `schema.sql`), tidak perlu langkah ini — kolomnya sudah termasuk di `schema.sql`.
+
+**Fitur baru:**
+- Saat menambah/mengubah kegiatan, pilih **"📅 Tanggal tertentu (sekali)"** untuk kegiatan yang hanya terjadi sekali di tanggal spesifik (bukan berulang tiap minggu).
+- Klik ikon **✎** di samping nama anak (chip) untuk mengubah profil atau menghapusnya. Menghapus profil anak akan ikut menghapus semua kegiatan dan riwayatnya secara permanen (ada konfirmasi sebelum benar-benar terhapus).

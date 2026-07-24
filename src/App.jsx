@@ -9,7 +9,7 @@ import PrintView from './PrintView'
 import EmailModal from './EmailModal'
 import HistoryView from './HistoryView'
 import { buildSchedulePdfBase64 } from './pdfUtils'
-import { todayKey, todayDow } from './constants'
+import { todayKey, isItemActiveOnDate } from './constants'
 
 export default function App() {
   const [session, setSession] = useState(null)
@@ -21,6 +21,7 @@ export default function App() {
   const [doneMap, setDoneMap] = useState({}) // schedule_item_id -> completion id
 
   const [showChildModal, setShowChildModal] = useState(false)
+  const [editingChild, setEditingChild] = useState(null)
   const [showEmailModal, setShowEmailModal] = useState(false)
   const [view, setView] = useState('jadwal') // jadwal | riwayat
   const [editingItem, setEditingItem] = useState(null) // null = closed, {} = new, {...} = edit
@@ -85,8 +86,8 @@ export default function App() {
   }
 
   const todayItems = useMemo(() => {
-    const dow = todayDow()
-    return items.filter((i) => (i.days || []).includes(dow))
+    const today = new Date()
+    return items.filter((i) => isItemActiveOnDate(i, today))
   }, [items])
 
   const activeChild = children.find((c) => c.id === activeChildId)
@@ -105,12 +106,40 @@ export default function App() {
     }
   }
 
+  async function handleUpdateChild({ name, avatar_color, avatar_emoji }) {
+    const { data, error } = await supabase
+      .from('children')
+      .update({ name, avatar_color, avatar_emoji })
+      .eq('id', editingChild.id)
+      .select()
+      .single()
+    if (!error && data) {
+      setChildren((prev) => prev.map((c) => (c.id === data.id ? data : c)))
+    }
+    setEditingChild(null)
+  }
+
+  async function handleDeleteChild() {
+    const deletedId = editingChild.id
+    await supabase.from('children').delete().eq('id', deletedId)
+    setChildren((prev) => {
+      const next = prev.filter((c) => c.id !== deletedId)
+      if (activeChildId === deletedId) {
+        setActiveChildId(next[0]?.id || null)
+        setItems([])
+        setDoneMap({})
+      }
+      return next
+    })
+    setEditingChild(null)
+  }
+
   // --- schedule item CRUD ---
-  async function handleSaveItem({ title, time, icon, days }) {
+  async function handleSaveItem({ title, time, icon, days, event_date }) {
     if (editingItem?.id) {
       const { data, error } = await supabase
         .from('schedule_items')
-        .update({ title, time, icon, days })
+        .update({ title, time, icon, days, event_date })
         .eq('id', editingItem.id)
         .select()
         .single()
@@ -120,7 +149,7 @@ export default function App() {
     } else {
       const { data, error } = await supabase
         .from('schedule_items')
-        .insert({ title, time, icon, days, child_id: activeChildId })
+        .insert({ title, time, icon, days, event_date, child_id: activeChildId })
         .select()
         .single()
       if (!error && data) {
@@ -205,6 +234,7 @@ export default function App() {
         activeId={activeChildId}
         onSelect={setActiveChildId}
         onAddChild={() => setShowChildModal(true)}
+        onEditChild={setEditingChild}
       />
 
       {activeChild && view === 'riwayat' && (
@@ -268,6 +298,15 @@ export default function App() {
 
       {showChildModal && (
         <ChildModal onClose={() => setShowChildModal(false)} onSave={handleAddChild} />
+      )}
+
+      {editingChild && (
+        <ChildModal
+          initial={editingChild}
+          onClose={() => setEditingChild(null)}
+          onSave={handleUpdateChild}
+          onDelete={handleDeleteChild}
+        />
       )}
 
       {editingItem !== null && (

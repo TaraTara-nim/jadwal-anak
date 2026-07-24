@@ -275,13 +275,42 @@ button {
   flex: 0 0 auto;
   display: flex;
   align-items: center;
-  gap: 8px;
   background: white;
   border: 2px solid #F0E7DA;
   border-radius: 999px;
-  padding: 8px 16px 8px 8px;
+  padding: 4px;
   font-weight: 700;
   color: var(--muted);
+}
+
+.child-chip-select {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: none;
+  border: none;
+  padding: 4px 10px 4px 4px;
+  font-weight: 700;
+  color: inherit;
+  font-size: 1rem;
+}
+
+.child-chip-edit {
+  background: none;
+  border: none;
+  color: var(--muted);
+  font-size: 0.85rem;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.child-chip-edit:hover,
+.child-chip-edit:active {
+  background: #F5EEE1;
 }
 
 .child-chip-avatar {
@@ -303,7 +332,9 @@ button {
 
 .child-chip-add {
   background: transparent;
-  border-style: dashed;
+  border: 2px dashed #F0E7DA;
+  padding: 8px 16px 8px 8px;
+  gap: 8px;
 }
 
 /* ---------- Day summary ---------- */
@@ -424,6 +455,15 @@ button {
   font-weight: 700;
 }
 
+.schedule-badge {
+  margin-left: 8px;
+  background: #FFF1E7;
+  color: var(--orange);
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 0.7rem;
+}
+
 /* ---------- Empty state ---------- */
 .empty-state {
   text-align: center;
@@ -526,6 +566,29 @@ button {
   background: var(--orange);
   border-color: var(--orange);
   color: white;
+}
+
+.repeat-switch {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.repeat-option {
+  flex: 1 1 auto;
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+  border: 2px solid #F0E7DA;
+  background: #FFFDF9;
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.repeat-option-active {
+  border-color: var(--orange);
+  background: #FFF1E7;
+  color: var(--ink);
 }
 
 /* ---------- History view ---------- */
@@ -698,6 +761,11 @@ button {
 
 .print-icon {
   font-size: 1rem;
+}
+
+.print-subheader {
+  font-size: 1.1rem;
+  margin: 20px 0 8px;
 }
 
 @media print {

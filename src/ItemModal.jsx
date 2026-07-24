@@ -1,11 +1,13 @@
 import React, { useState } from 'react'
-import { ICONS, DAYS } from './constants'
+import { ICONS, DAYS, toISODate } from './constants'
 
 export default function ItemModal({ initial, onClose, onSave, onDelete }) {
   const [title, setTitle] = useState(initial?.title || '')
   const [time, setTime] = useState(initial?.time || '07:00')
   const [icon, setIcon] = useState(initial?.icon || ICONS[0])
+  const [repeatType, setRepeatType] = useState(initial?.event_date ? 'sekali' : 'ulang')
   const [days, setDays] = useState(initial?.days ?? [0, 1, 2, 3, 4, 5, 6])
+  const [eventDate, setEventDate] = useState(initial?.event_date || toISODate(new Date()))
   const [saving, setSaving] = useState(false)
 
   function toggleDay(d) {
@@ -16,9 +18,17 @@ export default function ItemModal({ initial, onClose, onSave, onDelete }) {
 
   async function handleSubmit(e) {
     e.preventDefault()
-    if (!title.trim() || days.length === 0) return
+    if (!title.trim()) return
+    if (repeatType === 'ulang' && days.length === 0) return
+    if (repeatType === 'sekali' && !eventDate) return
     setSaving(true)
-    await onSave({ title: title.trim(), time, icon, days })
+    await onSave({
+      title: title.trim(),
+      time,
+      icon,
+      days: repeatType === 'ulang' ? days : [],
+      event_date: repeatType === 'sekali' ? eventDate : null,
+    })
     setSaving(false)
   }
 
@@ -58,19 +68,51 @@ export default function ItemModal({ initial, onClose, onSave, onDelete }) {
             ))}
           </div>
 
-          <label className="field-label">Hari</label>
-          <div className="day-grid">
-            {DAYS.map((d) => (
-              <button
-                type="button"
-                key={d.key}
-                className={`day-option ${days.includes(d.key) ? 'day-option-active' : ''}`}
-                onClick={() => toggleDay(d.key)}
-              >
-                {d.label}
-              </button>
-            ))}
+          <label className="field-label">Jenis jadwal</label>
+          <div className="repeat-switch">
+            <button
+              type="button"
+              className={`repeat-option ${repeatType === 'ulang' ? 'repeat-option-active' : ''}`}
+              onClick={() => setRepeatType('ulang')}
+            >
+              🔁 Berulang tiap minggu
+            </button>
+            <button
+              type="button"
+              className={`repeat-option ${repeatType === 'sekali' ? 'repeat-option-active' : ''}`}
+              onClick={() => setRepeatType('sekali')}
+            >
+              📅 Tanggal tertentu (sekali)
+            </button>
           </div>
+
+          {repeatType === 'ulang' ? (
+            <>
+              <label className="field-label">Hari</label>
+              <div className="day-grid">
+                {DAYS.map((d) => (
+                  <button
+                    type="button"
+                    key={d.key}
+                    className={`day-option ${days.includes(d.key) ? 'day-option-active' : ''}`}
+                    onClick={() => toggleDay(d.key)}
+                  >
+                    {d.label}
+                  </button>
+                ))}
+              </div>
+            </>
+          ) : (
+            <>
+              <label className="field-label">Tanggal</label>
+              <input
+                type="date"
+                className="text-input"
+                value={eventDate}
+                onChange={(e) => setEventDate(e.target.value)}
+              />
+            </>
+          )}
 
           <div className="modal-actions">
             {initial && (

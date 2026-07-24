@@ -78,3 +78,11 @@ export function formatMonthYear(date) {
 
 // Days ordered Senin -> Minggu for weekly/monthly tables (DAYS above is Minggu-first, JS getDay convention)
 export const WEEK_ORDER = [1, 2, 3, 4, 5, 6, 0]
+
+// An item is active on a date either because its event_date matches exactly (one-time)
+// or, for recurring items (event_date is null), because the date's weekday is in item.days
+export function isItemActiveOnDate(item, date) {
+  const iso = toISODate(date)
+  if (item.event_date) return item.event_date === iso
+  return (item.days || []).includes(date.getDay())
+}

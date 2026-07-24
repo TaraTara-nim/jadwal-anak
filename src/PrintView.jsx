@@ -1,8 +1,13 @@
 import React from 'react'
-import { DAYS } from './constants'
+import { DAYS, formatFull } from './constants'
 
 export default function PrintView({ child, items }) {
   if (!child) return null
+
+  const recurring = items.filter((i) => !i.event_date)
+  const oneTime = items
+    .filter((i) => i.event_date)
+    .sort((a, b) => (a.event_date + a.time).localeCompare(b.event_date + b.time))
 
   return (
     <div className="print-area">
@@ -22,7 +27,7 @@ export default function PrintView({ child, items }) {
           </tr>
         </thead>
         <tbody>
-          {items
+          {recurring
             .slice()
             .sort((a, b) => a.time.localeCompare(b.time))
             .map((item) => (
@@ -41,7 +46,31 @@ export default function PrintView({ child, items }) {
         </tbody>
       </table>
 
-      {items.length === 0 && <p>Belum ada kegiatan yang dijadwalkan.</p>}
+      {recurring.length === 0 && <p>Belum ada kegiatan berulang yang dijadwalkan.</p>}
+
+      {oneTime.length > 0 && (
+        <>
+          <h2 className="print-subheader">Kegiatan Khusus (Sekali Jadi)</h2>
+          <table className="print-table">
+            <thead>
+              <tr>
+                <th>Tanggal</th>
+                <th>Jam</th>
+                <th>Kegiatan</th>
+              </tr>
+            </thead>
+            <tbody>
+              {oneTime.map((item) => (
+                <tr key={item.id}>
+                  <td>{formatFull(new Date(item.event_date + 'T00:00:00'))}</td>
+                  <td>{item.time?.slice(0, 5)}</td>
+                  <td><span className="print-icon">{item.icon}</span> {item.title}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </>
+      )}
     </div>
   )
 }
