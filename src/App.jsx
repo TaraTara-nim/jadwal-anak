@@ -183,19 +183,19 @@ export default function App() {
         <div className="header-actions">
           {activeChild && (
             <>
-              <button className="btn btn-ghost btn-small" onClick={() => setView('riwayat')}>
-                📊 Riwayat
+              <button className="btn btn-ghost btn-small" onClick={() => setView('riwayat')} aria-label="Riwayat">
+                <span aria-hidden="true">📊</span><span className="btn-label"> Riwayat</span>
               </button>
-              <button className="btn btn-ghost btn-small" onClick={() => window.print()}>
-                🖨️ Cetak
+              <button className="btn btn-ghost btn-small" onClick={() => window.print()} aria-label="Cetak">
+                <span aria-hidden="true">🖨️</span><span className="btn-label"> Cetak</span>
               </button>
-              <button className="btn btn-ghost btn-small" onClick={() => setShowEmailModal(true)}>
-                📧 Email
+              <button className="btn btn-ghost btn-small" onClick={() => setShowEmailModal(true)} aria-label="Email">
+                <span aria-hidden="true">📧</span><span className="btn-label"> Email</span>
               </button>
             </>
           )}
-          <button className="btn btn-ghost btn-small" onClick={() => supabase.auth.signOut()}>
-            Keluar
+          <button className="btn btn-ghost btn-small" onClick={() => supabase.auth.signOut()} aria-label="Keluar">
+            <span aria-hidden="true">🚪</span><span className="btn-label"> Keluar</span>
           </button>
         </div>
       </header>
@@ -258,7 +258,7 @@ export default function App() {
       )}
 
       {!activeChild && children.length === 0 && (
-        <div className="empty-state">
+        <div className="empty-state empty-state-fill">
           <p>Belum ada profil anak. Tambahkan dulu untuk mulai membuat jadwal.</p>
           <button className="btn btn-primary" onClick={() => setShowChildModal(true)}>
             Tambah Anak Pertama
