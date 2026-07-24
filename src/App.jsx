@@ -180,9 +180,24 @@ export default function App() {
     <div className="app-shell">
       <header className="app-header">
         <h1 className="app-logo">🌈 Jadwal Ceria</h1>
-        <button className="btn btn-ghost btn-small" onClick={() => supabase.auth.signOut()}>
-          Keluar
-        </button>
+        <div className="header-actions">
+          {activeChild && (
+            <>
+              <button className="btn btn-ghost btn-small" onClick={() => setView('riwayat')}>
+                📊 Riwayat
+              </button>
+              <button className="btn btn-ghost btn-small" onClick={() => window.print()}>
+                🖨️ Cetak
+              </button>
+              <button className="btn btn-ghost btn-small" onClick={() => setShowEmailModal(true)}>
+                📧 Email
+              </button>
+            </>
+          )}
+          <button className="btn btn-ghost btn-small" onClick={() => supabase.auth.signOut()}>
+            Keluar
+          </button>
+        </div>
       </header>
 
       <ChildBar
@@ -210,15 +225,6 @@ export default function App() {
               </p>
             </div>
             <div className="day-summary-actions">
-              <button className="btn btn-ghost btn-small" onClick={() => setView('riwayat')}>
-                📊 Riwayat
-              </button>
-              <button className="btn btn-ghost btn-small" onClick={() => window.print()}>
-                🖨️ Cetak
-              </button>
-              <button className="btn btn-ghost btn-small" onClick={() => setShowEmailModal(true)}>
-                📧 Email
-              </button>
               <button className="btn btn-primary" onClick={() => setEditingItem({})}>
                 + Kegiatan
               </button>
