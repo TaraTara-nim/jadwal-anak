@@ -270,6 +270,14 @@ button {
   font-weight: 700;
 }
 
+.day-summary-actions {
+  display: flex;
+  gap: 8px;
+  flex: 0 0 auto;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
 /* ---------- Schedule list ---------- */
 .schedule-list {
   display: flex;
@@ -458,4 +466,72 @@ button {
 
 @media (prefers-reduced-motion: reduce) {
   .btn, .check-circle { transition: none; }
+}
+
+/* ---------- Print view ---------- */
+.print-area {
+  display: none;
+}
+
+.print-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.print-avatar {
+  font-size: 2rem;
+}
+
+.print-header h1 {
+  font-size: 1.4rem;
+  margin: 0;
+}
+
+.print-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+}
+
+.print-table th,
+.print-table td {
+  border: 1px solid #333;
+  padding: 8px 6px;
+  text-align: left;
+}
+
+.print-table th {
+  background: #f0f0f0;
+}
+
+.print-check-cell {
+  text-align: center;
+  font-size: 1rem;
+  width: 32px;
+}
+
+.print-icon {
+  font-size: 1rem;
+}
+
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  .print-area,
+  .print-area * {
+    visibility: visible;
+  }
+  .print-area {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 20px;
+    color: black;
+    background: white;
+  }
 }

@@ -5,6 +5,9 @@ import ChildBar from './ChildBar'
 import ChildModal from './ChildModal'
 import ItemModal from './ItemModal'
 import ScheduleItem from './ScheduleItem'
+import PrintView from './PrintView'
+import EmailModal from './EmailModal'
+import { buildSchedulePdfBase64 } from './pdfUtils'
 import { todayKey, todayDow } from './constants'
 
 export default function App() {
@@ -17,6 +20,7 @@ export default function App() {
   const [doneMap, setDoneMap] = useState({}) // schedule_item_id -> completion id
 
   const [showChildModal, setShowChildModal] = useState(false)
+  const [showEmailModal, setShowEmailModal] = useState(false)
   const [editingItem, setEditingItem] = useState(null) // null = closed, {} = new, {...} = edit
   const [loadingData, setLoadingData] = useState(false)
 
@@ -153,6 +157,18 @@ export default function App() {
     }
   }
 
+  // --- send PDF via email ---
+  async function handleSendEmail(email) {
+    const pdfBase64 = buildSchedulePdfBase64(activeChild, items)
+    const res = await fetch('/.netlify/functions/send-schedule-email', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, childName: activeChild.name, pdfBase64 }),
+    })
+    const data = await res.json()
+    if (!res.ok) throw new Error(data.error || 'Gagal mengirim email.')
+  }
+
   if (authLoading) return <div className="loading-screen">Memuat…</div>
   if (!session) return <Login />
 
@@ -185,9 +201,17 @@ export default function App() {
                   : `${doneCount} dari ${todayItems.length} selesai`}
               </p>
             </div>
-            <button className="btn btn-primary" onClick={() => setEditingItem({})}>
-              + Kegiatan
-            </button>
+            <div className="day-summary-actions">
+              <button className="btn btn-ghost btn-small" onClick={() => window.print()}>
+                🖨️ Cetak
+              </button>
+              <button className="btn btn-ghost btn-small" onClick={() => setShowEmailModal(true)}>
+                📧 Email
+              </button>
+              <button className="btn btn-primary" onClick={() => setEditingItem({})}>
+                + Kegiatan
+              </button>
+            </div>
           </div>
 
           {loadingData ? (
@@ -237,6 +261,12 @@ export default function App() {
           onDelete={handleDeleteItem}
         />
       )}
+
+      {showEmailModal && (
+        <EmailModal onClose={() => setShowEmailModal(false)} onSend={handleSendEmail} />
+      )}
+
+      <PrintView child={activeChild} items={items} />
     </div>
   )
 }
