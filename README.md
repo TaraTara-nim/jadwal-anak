@@ -83,3 +83,25 @@ Setelah deploy selesai, buka URL Netlify-nya — aplikasi siap dipakai. Daftar a
 - Notifikasi pengingat (butuh service worker + push notification, atau integrasi email/WhatsApp API).
 - Mode "anak" tanpa login yang hanya bisa mencentang, tanpa bisa mengedit — bisa dibuat lewat halaman terpisah dengan Supabase anon read-only view.
 - Statistik mingguan (grafik konsistensi kegiatan per anak).
+
+---
+
+## 4. Fitur Cetak & Kirim PDF via Email
+
+### Cetak
+Tombol **🖨️ Cetak** langsung memakai fitur print bawaan browser — tidak perlu setup tambahan.
+
+### Kirim PDF via Email
+Fitur ini memakai **Resend** ([resend.com](https://resend.com)) untuk mengirim email, dan **Netlify Functions** sebagai perantara supaya API key tidak terekspos di browser.
+
+**Cara setup:**
+
+1. Daftar gratis di **[resend.com](https://resend.com)** (tidak perlu kartu kredit untuk paket gratis).
+2. Setelah login, buka menu **API Keys** → **Create API Key** → catat key yang muncul (formatnya `re_xxxxxxxxxxxx`).
+3. Di Netlify Dashboard, buka project kamu → **Site configuration → Environment variables** → **Add a variable**:
+   - Key: `RESEND_API_KEY`
+   - Value: (key dari Resend tadi)
+   - **Jangan** pakai awalan `VITE_` untuk ini — supaya key tetap rahasia dan hanya bisa diakses lewat server (Netlify Function), bukan dari browser.
+4. Trigger deploy ulang (**Deploys → Trigger deploy → Deploy site**).
+
+**Batasan paket gratis Resend:** selama kamu belum memverifikasi domain sendiri di Resend, email hanya bisa dikirim ke **alamat email yang kamu pakai mendaftar Resend** (mode testing). Untuk mengirim ke sembarang alamat email (misal ke email pasangan atau pengasuh), kamu perlu verifikasi domain sendiri di Resend (menu **Domains**) — butuh akses pengaturan DNS domain. Untuk pemakaian pribadi, mode testing biasanya sudah cukup.
