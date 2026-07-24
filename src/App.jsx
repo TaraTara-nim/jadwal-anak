@@ -7,6 +7,7 @@ import ItemModal from './ItemModal'
 import ScheduleItem from './ScheduleItem'
 import PrintView from './PrintView'
 import EmailModal from './EmailModal'
+import HistoryView from './HistoryView'
 import { buildSchedulePdfBase64 } from './pdfUtils'
 import { todayKey, todayDow } from './constants'
 
@@ -21,6 +22,7 @@ export default function App() {
 
   const [showChildModal, setShowChildModal] = useState(false)
   const [showEmailModal, setShowEmailModal] = useState(false)
+  const [view, setView] = useState('jadwal') // jadwal | riwayat
   const [editingItem, setEditingItem] = useState(null) // null = closed, {} = new, {...} = edit
   const [loadingData, setLoadingData] = useState(false)
 
@@ -190,7 +192,13 @@ export default function App() {
         onAddChild={() => setShowChildModal(true)}
       />
 
-      {activeChild && (
+      {activeChild && view === 'riwayat' && (
+        <main className="app-main">
+          <HistoryView child={activeChild} items={items} onBack={() => setView('jadwal')} />
+        </main>
+      )}
+
+      {activeChild && view === 'jadwal' && (
         <main className="app-main">
           <div className="day-summary" style={{ '--accent': activeChild.avatar_color }}>
             <div>
@@ -202,6 +210,9 @@ export default function App() {
               </p>
             </div>
             <div className="day-summary-actions">
+              <button className="btn btn-ghost btn-small" onClick={() => setView('riwayat')}>
+                📊 Riwayat
+              </button>
               <button className="btn btn-ghost btn-small" onClick={() => window.print()}>
                 🖨️ Cetak
               </button>
