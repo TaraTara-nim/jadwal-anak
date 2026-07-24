@@ -79,6 +79,10 @@ export default function Login() {
           {mode === 'signin' ? 'Belum punya akun? Daftar' : 'Sudah punya akun? Masuk'}
         </button>
       </div>
+
+      <footer className="app-footer">
+        Copyright (C) 2026 Megantara. All rights reserved.
+      </footer>
     </div>
   )
 }

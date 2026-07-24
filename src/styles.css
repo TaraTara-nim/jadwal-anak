@@ -56,8 +56,10 @@ button {
 .auth-screen {
   min-height: 100vh;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
+  gap: 18px;
   padding: 24px;
 }
 
@@ -208,6 +210,51 @@ button {
   justify-content: flex-end;
 }
 
+@media (max-width: 480px) {
+  .app-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+
+  .app-logo {
+    font-size: 1.3rem;
+    text-align: center;
+  }
+
+  .header-actions {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    justify-content: flex-start;
+    padding-bottom: 2px;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .header-actions .btn {
+    flex: 0 0 auto;
+    white-space: nowrap;
+  }
+
+  .header-actions::-webkit-scrollbar {
+    display: none;
+  }
+
+  .history-mode-switch {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .mode-chip {
+    padding: 8px 10px;
+    font-size: 0.75rem;
+  }
+
+  .history-range-label {
+    min-width: 0;
+    font-size: 0.9rem;
+  }
+}
+
 .app-logo {
   font-size: 1.5rem;
   font-weight: 800;
@@ -263,6 +310,8 @@ button {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
   background: var(--card);
   border-radius: var(--radius);
   padding: 18px 20px;
@@ -590,6 +639,15 @@ button {
 
 @media (prefers-reduced-motion: reduce) {
   .btn, .check-circle { transition: none; }
+}
+
+/* ---------- Footer ---------- */
+.app-footer {
+  text-align: center;
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 700;
+  padding: 24px 12px 8px;
 }
 
 /* ---------- Print view ---------- */

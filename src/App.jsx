@@ -284,6 +284,10 @@ export default function App() {
       )}
 
       <PrintView child={activeChild} items={items} />
+
+      <footer className="app-footer">
+        Copyright (C) 2026 Megantara. All rights reserved.
+      </footer>
     </div>
   )
 }
