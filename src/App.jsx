@@ -8,6 +8,7 @@ import ScheduleItem from './ScheduleItem'
 import PrintView from './PrintView'
 import EmailModal from './EmailModal'
 import HistoryView from './HistoryView'
+import WhatsAppModal from './WhatsAppModal'
 import { buildSchedulePdfBase64 } from './pdfUtils'
 import { todayKey, isItemActiveOnDate } from './constants'
 
@@ -23,6 +24,7 @@ export default function App() {
   const [showChildModal, setShowChildModal] = useState(false)
   const [editingChild, setEditingChild] = useState(null)
   const [showEmailModal, setShowEmailModal] = useState(false)
+  const [showWaModal, setShowWaModal] = useState(false)
   const [view, setView] = useState('jadwal') // jadwal | riwayat
   const [editingItem, setEditingItem] = useState(null) // null = closed, {} = new, {...} = edit
   const [loadingData, setLoadingData] = useState(false)
@@ -221,6 +223,9 @@ export default function App() {
               <button className="btn btn-ghost btn-small" onClick={() => setShowEmailModal(true)} aria-label="Email">
                 <span aria-hidden="true">📧</span><span className="btn-label"> Email</span>
               </button>
+              <button className="btn btn-ghost btn-small" onClick={() => setShowWaModal(true)} aria-label="WhatsApp">
+                <span aria-hidden="true">📲</span><span className="btn-label"> WhatsApp</span>
+              </button>
             </>
           )}
           <button className="btn btn-ghost btn-small" onClick={() => supabase.auth.signOut()} aria-label="Keluar">
@@ -320,6 +325,10 @@ export default function App() {
 
       {showEmailModal && (
         <EmailModal onClose={() => setShowEmailModal(false)} onSend={handleSendEmail} />
+      )}
+
+      {showWaModal && (
+        <WhatsAppModal child={activeChild} items={items} onClose={() => setShowWaModal(false)} />
       )}
 
       <PrintView child={activeChild} items={items} />

@@ -112,3 +112,11 @@ Kalau ini instalasi baru (baru pertama kali menjalankan `schema.sql`), tidak per
 **Fitur baru:**
 - Saat menambah/mengubah kegiatan, pilih **"📅 Tanggal tertentu (sekali)"** untuk kegiatan yang hanya terjadi sekali di tanggal spesifik (bukan berulang tiap minggu).
 - Klik ikon **✎** di samping nama anak (chip) untuk mengubah profil atau menghapusnya. Menghapus profil anak akan ikut menghapus semua kegiatan dan riwayatnya secara permanen (ada konfirmasi sebelum benar-benar terhapus).
+
+## 6. Kirim Jadwal via WhatsApp
+
+Tombol **📲 WhatsApp** di header tidak butuh setup apapun — dia memakai fitur "klik untuk chat" WhatsApp bawaan (link `wa.me`), bukan API berbayar. Saat diklik:
+- Kalau nomor tujuan dikosongkan, WhatsApp akan terbuka dan kamu pilih sendiri kontaknya
+- Kalau nomor diisi (format `62812xxxxxxxx`, tanpa `+` atau `0` di depan), langsung membuka chat ke nomor itu
+
+Pesannya berupa teks ringkasan jadwal (bukan file PDF) — karena `wa.me` cuma mendukung isi pesan teks, bukan lampiran file otomatis. Kalau butuh kirim file PDF lewat WhatsApp, kamu perlu download dulu (lewat tombol Cetak → Save as PDF), lalu lampirkan manual di chat WhatsApp.
