@@ -591,6 +591,29 @@ button {
   color: var(--ink);
 }
 
+.time-range-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.time-range-row .text-input {
+  flex: 1;
+}
+
+.time-range-sep {
+  font-weight: 700;
+  color: var(--muted);
+  font-size: 0.85rem;
+  flex: 0 0 auto;
+}
+
+.field-hint {
+  margin: 6px 0 0;
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+
 /* ---------- History view ---------- */
 .history-view {
   display: flex;

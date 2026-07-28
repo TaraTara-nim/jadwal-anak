@@ -4,6 +4,7 @@ import { ICONS, DAYS, toISODate } from './constants'
 export default function ItemModal({ initial, onClose, onSave, onDelete }) {
   const [title, setTitle] = useState(initial?.title || '')
   const [time, setTime] = useState(initial?.time || '07:00')
+  const [endTime, setEndTime] = useState(initial?.end_time || '')
   const [icon, setIcon] = useState(initial?.icon || ICONS[0])
   const [repeatType, setRepeatType] = useState(initial?.event_date ? 'sekali' : 'ulang')
   const [days, setDays] = useState(initial?.days ?? [0, 1, 2, 3, 4, 5, 6])
@@ -25,6 +26,7 @@ export default function ItemModal({ initial, onClose, onSave, onDelete }) {
     await onSave({
       title: title.trim(),
       time,
+      end_time: endTime || null,
       icon,
       days: repeatType === 'ulang' ? days : [],
       event_date: repeatType === 'sekali' ? eventDate : null,
@@ -47,12 +49,23 @@ export default function ItemModal({ initial, onClose, onSave, onDelete }) {
           />
 
           <label className="field-label">Jam</label>
-          <input
-            type="time"
-            className="text-input"
-            value={time}
-            onChange={(e) => setTime(e.target.value)}
-          />
+          <div className="time-range-row">
+            <input
+              type="time"
+              className="text-input"
+              value={time}
+              onChange={(e) => setTime(e.target.value)}
+            />
+            <span className="time-range-sep">sampai</span>
+            <input
+              type="time"
+              className="text-input"
+              value={endTime}
+              onChange={(e) => setEndTime(e.target.value)}
+              placeholder="(opsional)"
+            />
+          </div>
+          <p className="field-hint">Kosongkan jam "sampai" kalau kegiatan cuma di satu waktu, tidak berupa rentang.</p>
 
           <label className="field-label">Ikon</label>
           <div className="emoji-grid">

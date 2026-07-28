@@ -12,7 +12,7 @@ export function buildSchedulePdf(child, items) {
 
   const head = [['Jam', 'Kegiatan', ...DAYS.map((d) => d.label)]]
   const body = sorted.map((item) => [
-    item.time?.slice(0, 5) || '',
+    (item.time?.slice(0, 5) || '') + (item.end_time ? ` – ${item.end_time.slice(0, 5)}` : ''),
     `${item.icon || ''} ${item.title}`,
     ...DAYS.map((d) => ((item.days || []).includes(d.key) ? 'v' : '')),
   ])

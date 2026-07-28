@@ -135,11 +135,11 @@ export default function App() {
   }
 
   // --- schedule item CRUD ---
-  async function handleSaveItem({ title, time, icon, days, event_date }) {
+  async function handleSaveItem({ title, time, end_time, icon, days, event_date }) {
     if (editingItem?.id) {
       const { data, error } = await supabase
         .from('schedule_items')
-        .update({ title, time, icon, days, event_date })
+        .update({ title, time, end_time, icon, days, event_date })
         .eq('id', editingItem.id)
         .select()
         .single()
@@ -149,7 +149,7 @@ export default function App() {
     } else {
       const { data, error } = await supabase
         .from('schedule_items')
-        .insert({ title, time, icon, days, event_date, child_id: activeChildId })
+        .insert({ title, time, end_time, icon, days, event_date, child_id: activeChildId })
         .select()
         .single()
       if (!error && data) {

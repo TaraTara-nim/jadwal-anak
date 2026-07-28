@@ -133,7 +133,7 @@ function DailyTable({ items, date, isDone }) {
       <tbody>
         {applicable.map((item) => (
           <tr key={item.id}>
-            <td>{item.time?.slice(0, 5)}</td>
+            <td>{item.time?.slice(0, 5)}{item.end_time ? ` – ${item.end_time.slice(0, 5)}` : ''}</td>
             <td>{item.icon} {item.title}</td>
             <td>
               {isDone(item.id, isoDate) ? (

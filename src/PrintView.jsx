@@ -32,7 +32,7 @@ export default function PrintView({ child, items }) {
             .sort((a, b) => a.time.localeCompare(b.time))
             .map((item) => (
               <tr key={item.id}>
-                <td>{item.time?.slice(0, 5)}</td>
+                <td>{item.time?.slice(0, 5)}{item.end_time ? ` – ${item.end_time.slice(0, 5)}` : ''}</td>
                 <td>
                   <span className="print-icon">{item.icon}</span> {item.title}
                 </td>
@@ -63,7 +63,7 @@ export default function PrintView({ child, items }) {
               {oneTime.map((item) => (
                 <tr key={item.id}>
                   <td>{formatFull(new Date(item.event_date + 'T00:00:00'))}</td>
-                  <td>{item.time?.slice(0, 5)}</td>
+                  <td>{item.time?.slice(0, 5)}{item.end_time ? ` – ${item.end_time.slice(0, 5)}` : ''}</td>
                   <td><span className="print-icon">{item.icon}</span> {item.title}</td>
                 </tr>
               ))}
