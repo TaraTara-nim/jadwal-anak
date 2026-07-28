@@ -1,8 +1,21 @@
 import React from 'react'
 import { DAYS, formatFull } from './constants'
+import WeeklyMatrix from './WeeklyMatrix'
 
-export default function PrintView({ child, items }) {
+export default function PrintView({ child, items, matrixWeekStart }) {
   if (!child) return null
+
+  if (matrixWeekStart) {
+    return (
+      <div className="print-area">
+        <div className="print-header">
+          <span className="print-avatar">{child.avatar_emoji}</span>
+          <h1>Papan Jadwal Mingguan {child.name}</h1>
+        </div>
+        <WeeklyMatrix items={items} weekStart={matrixWeekStart} />
+      </div>
+    )
+  }
 
   const recurring = items.filter((i) => !i.event_date)
   const oneTime = items

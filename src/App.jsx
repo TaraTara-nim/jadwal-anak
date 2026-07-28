@@ -25,6 +25,7 @@ export default function App() {
   const [editingChild, setEditingChild] = useState(null)
   const [showEmailModal, setShowEmailModal] = useState(false)
   const [showWaModal, setShowWaModal] = useState(false)
+  const [matrixWeekStart, setMatrixWeekStart] = useState(null)
   const [view, setView] = useState('jadwal') // jadwal | riwayat
   const [editingItem, setEditingItem] = useState(null) // null = closed, {} = new, {...} = edit
   const [loadingData, setLoadingData] = useState(false)
@@ -202,6 +203,15 @@ export default function App() {
     if (!res.ok) throw new Error(data.error || 'Gagal mengirim email.')
   }
 
+  // --- print weekly matrix board ---
+  function handlePrintMatrix(weekStart) {
+    setMatrixWeekStart(weekStart)
+    setTimeout(() => {
+      window.print()
+      setTimeout(() => setMatrixWeekStart(null), 300)
+    }, 50)
+  }
+
   if (authLoading) return <div className="loading-screen">Memuat…</div>
   if (!session) return <Login />
 
@@ -244,7 +254,7 @@ export default function App() {
 
       {activeChild && view === 'riwayat' && (
         <main className="app-main">
-          <HistoryView child={activeChild} items={items} onBack={() => setView('jadwal')} />
+          <HistoryView child={activeChild} items={items} onBack={() => setView('jadwal')} onPrintMatrix={handlePrintMatrix} />
         </main>
       )}
 
@@ -331,7 +341,7 @@ export default function App() {
         <WhatsAppModal child={activeChild} items={items} onClose={() => setShowWaModal(false)} />
       )}
 
-      <PrintView child={activeChild} items={items} />
+      <PrintView child={activeChild} items={items} matrixWeekStart={matrixWeekStart} />
 
       <footer className="app-footer">
         Copyright (C) 2026 Megantara. All rights reserved.

@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import { supabase } from './supabaseClient'
+import WeeklyMatrix from './WeeklyMatrix'
 import {
   DAYS,
   WEEK_ORDER,
@@ -15,8 +16,8 @@ import {
   isItemActiveOnDate,
 } from './constants'
 
-export default function HistoryView({ child, items, onBack }) {
-  const [mode, setMode] = useState('harian') // harian | mingguan | bulanan
+export default function HistoryView({ child, items, onBack, onPrintMatrix }) {
+  const [mode, setMode] = useState('harian') // harian | mingguan | papan | bulanan
   const [refDate, setRefDate] = useState(new Date())
   const [completionDates, setCompletionDates] = useState({}) // schedule_item_id -> Set of 'yyyy-mm-dd'
   const [loading, setLoading] = useState(false)
@@ -26,7 +27,7 @@ export default function HistoryView({ child, items, onBack }) {
     if (mode === 'harian') {
       return { start: refDate, end: refDate }
     }
-    if (mode === 'mingguan') {
+    if (mode === 'mingguan' || mode === 'papan') {
       const start = startOfWeekMonday(refDate)
       return { start, end: addDays(start, 6) }
     }
@@ -67,7 +68,7 @@ export default function HistoryView({ child, items, onBack }) {
 
   function shiftRef(delta) {
     if (mode === 'harian') setRefDate((d) => addDays(d, delta))
-    else if (mode === 'mingguan') setRefDate((d) => addDays(d, delta * 7))
+    else if (mode === 'mingguan' || mode === 'papan') setRefDate((d) => addDays(d, delta * 7))
     else setRefDate((d) => addMonths(d, delta))
   }
 
@@ -78,7 +79,7 @@ export default function HistoryView({ child, items, onBack }) {
       <div className="history-header">
         <button className="btn btn-ghost btn-small" onClick={onBack}>← Kembali</button>
         <div className="history-mode-switch">
-          {['harian', 'mingguan', 'bulanan'].map((m) => (
+          {['harian', 'mingguan', 'papan', 'bulanan'].map((m) => (
             <button
               key={m}
               className={`mode-chip ${mode === m ? 'mode-chip-active' : ''}`}
@@ -94,7 +95,7 @@ export default function HistoryView({ child, items, onBack }) {
         <button className="btn btn-ghost btn-small" onClick={() => shiftRef(-1)}>‹</button>
         <span className="history-range-label">
           {mode === 'harian' && formatFull(refDate)}
-          {mode === 'mingguan' && `${formatShort(range.start)} — ${formatShort(range.end)}`}
+          {(mode === 'mingguan' || mode === 'papan') && `${formatShort(range.start)} — ${formatShort(range.end)}`}
           {mode === 'bulanan' && formatMonthYear(refDate)}
         </span>
         <button className="btn btn-ghost btn-small" onClick={() => shiftRef(1)}>›</button>
@@ -108,6 +109,8 @@ export default function HistoryView({ child, items, onBack }) {
         <DailyTable items={sortedItems} date={refDate} isDone={isDone} />
       ) : mode === 'mingguan' ? (
         <WeeklyTable items={sortedItems} weekStart={range.start} isDone={isDone} />
+      ) : mode === 'papan' ? (
+        <WeeklyMatrix items={sortedItems} weekStart={range.start} onPrint={onPrintMatrix} />
       ) : (
         <MonthlyTable items={sortedItems} monthStart={range.start} monthEnd={range.end} isDone={isDone} />
       )}
