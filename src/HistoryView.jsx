@@ -17,7 +17,9 @@ import {
 } from './constants'
 
 export default function HistoryView({ child, items, onBack, onPrintMatrix }) {
-  const [mode, setMode] = useState('harian') // harian | mingguan | papan | bulanan
+  const [tab, setTab] = useState('daftar') // daftar | papan
+  const [daftarSubMode, setDaftarSubMode] = useState('harian') // harian | mingguan | bulanan
+  const mode = tab === 'papan' ? 'papan' : daftarSubMode
   const [refDate, setRefDate] = useState(new Date())
   const [completionDates, setCompletionDates] = useState({}) // schedule_item_id -> Set of 'yyyy-mm-dd'
   const [loading, setLoading] = useState(false)
@@ -79,16 +81,30 @@ export default function HistoryView({ child, items, onBack, onPrintMatrix }) {
       <div className="history-header">
         <button className="btn btn-ghost btn-small" onClick={onBack}>← Kembali</button>
         <div className="history-mode-switch">
-          {['harian', 'mingguan', 'papan', 'bulanan'].map((m) => (
-            <button
-              key={m}
-              className={`mode-chip ${mode === m ? 'mode-chip-active' : ''}`}
-              onClick={() => setMode(m)}
-            >
-              {m[0].toUpperCase() + m.slice(1)}
-            </button>
-          ))}
+          <button
+            className={`mode-chip ${tab === 'daftar' ? 'mode-chip-active' : ''}`}
+            onClick={() => setTab('daftar')}
+          >
+            Daftar
+          </button>
+          <button
+            className={`mode-chip ${tab === 'papan' ? 'mode-chip-active' : ''}`}
+            onClick={() => setTab('papan')}
+          >
+            Papan
+          </button>
         </div>
+        {tab === 'daftar' && (
+          <select
+            className="mode-dropdown"
+            value={daftarSubMode}
+            onChange={(e) => setDaftarSubMode(e.target.value)}
+          >
+            <option value="harian">Harian</option>
+            <option value="mingguan">Mingguan</option>
+            <option value="bulanan">Bulanan</option>
+          </select>
+        )}
       </div>
 
       <div className="history-nav">

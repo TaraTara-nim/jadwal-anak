@@ -653,6 +653,17 @@ button {
   color: white;
 }
 
+.mode-dropdown {
+  border: 2px solid #F0E7DA;
+  border-radius: 999px;
+  padding: 8px 14px;
+  font-weight: 800;
+  font-size: 0.85rem;
+  color: var(--ink);
+  background: white;
+  font-family: inherit;
+}
+
 .history-nav {
   display: flex;
   align-items: center;
